@@ -1,0 +1,7 @@
+
+{
+  "name": "Finanças Next - Migração Apus",
+  "description": "Aplicação de gestão financeira migrada de Java/Spring para Next.js e Supabase, com gerenciamento de usuários, categorias e lançamentos.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

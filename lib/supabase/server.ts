@@ -1,10 +1,11 @@
-
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 export function createClient() {
   const cookieStore = cookies()
 
+  // Garante que o código use as variáveis de ambiente do servidor, se existirem,
+  // ou as públicas como fallback.
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -15,23 +16,20 @@ export function createClient() {
         },
         set(name: string, value: string, options: CookieOptions) {
           try {
-            cookieStore.set(name, value, options) // Corrected signature
+            cookieStore.set({ name, value, ...options })
           } catch (error) {
-            // The `set` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
+            // Ocorre em Server Actions, pode ser ignorado
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
-            cookieStore.set(name, '', options) // Corrected signature for remove (set empty value)
+            cookieStore.set({ name, value: '', ...options })
           } catch (error) {
-            // The `delete` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
+            // Ocorre em Server Actions, pode ser ignorado
           }
         },
       },
     }
   )
+
 }
